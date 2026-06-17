@@ -7,8 +7,8 @@ const {
   getCardByTcgdexId,
 } = require("../controllers/cards.controller");
 
-router.get("/", getCards);
 router.get("/search", searchCards);
 router.get("/:tcgdexId", getCardByTcgdexId);
+router.get("/", getCards);
 
 module.exports = router;

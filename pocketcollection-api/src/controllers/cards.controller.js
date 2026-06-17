@@ -1,4 +1,4 @@
-const pool = require("../db/pool");
+const pool = require("../config/db");
 
 const getCards = async (req, res) => {
   try {
@@ -87,32 +87,36 @@ const getCardByTcgdexId = async (req, res) => {
     const result = await pool.query(
       `
       SELECT
-        c.*,
-        s.nombre_en AS set_nombre,
-        sr.nombre_en AS serie_nombre
-      FROM cards c
-      INNER JOIN sets s ON s.id = c.set_id
-      INNER JOIN series sr ON sr.id = s.serie_id
-      WHERE c.tcgdex_id = $1
-      LIMIT 1
+        id,
+        tcgdex_id,
+        set_id,
+        numero,
+        nombre_es,
+        nombre_en,
+        rareza,
+        categoria,
+        hp,
+        etapa,
+        regulacion,
+        imagen_url,
+        ilustrador
+      FROM cards
+      WHERE tcgdex_id = $1
       `,
       [tcgdexId]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({
-        message: "Carta no encontrada",
-      });
+      return res.status(404).json({ message: "Carta no encontrada" });
     }
 
-    res.json(result.rows[0]);
+    return res.json(result.rows[0]);
   } catch (error) {
-    res.status(500).json({
-      message: "Error obteniendo detalle de carta",
-      error: error.message,
-    });
+    console.error("Error obteniendo carta:", error);
+    return res.status(500).json({ message: "Error obteniendo carta" });
   }
 };
+
 
 module.exports = {
   getCards,

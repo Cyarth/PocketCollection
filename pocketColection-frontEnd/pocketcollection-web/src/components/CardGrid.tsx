@@ -1,10 +1,13 @@
 import type { Card } from "../types/card";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   cards: Card[];
 }
 
 function CardGrid({ cards }: Props) {
+  const navigate = useNavigate();
+
   if (cards.length === 0) {
     return <p className="empty">Escribe al menos 3 letras para buscar cartas.</p>;
   }
@@ -12,7 +15,10 @@ function CardGrid({ cards }: Props) {
   return (
     <section className="card-grid">
       {cards.map((card) => (
-        <article className="pokemon-card" key={card.tcgdex_id}>
+        <article
+          className="pokemon-card"
+          onClick={() => navigate(`/cards/${card.tcgdex_id}`)}
+          key={card.tcgdex_id}>
           <img
             src={`${card.imagen_url}/high.webp`}
             alt={card.nombre_en}

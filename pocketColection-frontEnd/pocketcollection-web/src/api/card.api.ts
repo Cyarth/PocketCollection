@@ -10,3 +10,8 @@ export const searchCards = async (name: string): Promise<Card[]> => {
 
   return response.data;
 };
+
+export const getCardById = async (id: string) => {
+  const response = await axios.get(`${API_URL}/cards/${id}`);
+  return response.data;
+};
